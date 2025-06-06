@@ -1,224 +1,48 @@
-# HLASM Analyser
-
-A Java-based tool for parsing and analyzing HLASM (High Level Assembler) code using ANTLR4. This project provides comprehensive tools for working with mainframe assembler code, including parsing, control flow analysis, dependency tracking, and visualization capabilities.
+# Tape/Z
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Java Version](https://img.shields.io/badge/Java-21%2B-blue.svg)](https://adoptium.net/en-GB/temurin/releases/)
 [![Maven](https://img.shields.io/badge/Maven-3.6%2B-orange.svg)](https://maven.apache.org/)
 
+## Tools for Assembly Program Exploration for Z/OS
+
+![logo](documentation/images/logo.png)
+
+Tape/Z is an evolving toolkit for analysing HLASM (High Level Assembler) code. The library provides capabilities for working with mainframe assembler code, including parsing, control flow analysis, dependency tracing, and flowchart visualization capabilities.
+
 ## Table of Contents
 - [Project Overview](#project-overview)
-- [Project Structure](#project-structure)
-- [Module Interactions](#module-interactions)
 - [Getting Started](#getting-started)
-- [Usage Examples](#usage-examples)
-- [Development](#development)
-- [Useful Neo4J Queries](#useful-neo4j-queries)
+- [Programmatic Usage](#programmatic-usage)
+- [CLI Usage](#cli-usage)
+- [Workflow](#workflow)
+- [Analysis Pipeline](#analysis-pipeline)
+- [Useful Neo4J Queries](#useful-neo4j-queries-for-my-own-reference)
 - [Contributing](#contributing)
 - [Reporting Issues](#reporting-issues)
+- [A Note on Copyright](#a-note-on-copyright)
 - [License](#license)
+
+![Example Flowchart in Neo4J](/documentation/images/flowchart-neo4j.png)
 
 ## Project Overview
 
-HLASM Analyser is designed to parse, analyze, and process HLASM (High Level Assembler) code, which is commonly used in mainframe environments. The project uses ANTLR4 to define the grammar for HLASM instructions and provides tools for working with parsed HLASM code.
+Tape/Z is designed to parse, analyse, and process HLASM (High Level Assembler) code, which is commonly used in mainframe environments. The project uses ANTLR4 to define the grammar for HLASM instructions and provides tools for working with parsed HLASM code.
+
+**Philophically, this is more of a set of tools intended for use in your own projects.**
+
+Internally, it uses many of the same components and class infrastructure from [Cobol-REKT](https://github.com/avishek-sen-gupta/cobol-rekt), and is intended to be a sibling project to that one.
 
 ### Key Features
 
-- **Comprehensive HLASM Parsing**: Parses HLASM code including labels, instructions, operands, and comments
+- **HLASM Parsing**: Parses HLASM code including labels, instructions, operands, and comments
 - **Embedded SQL Support**: Recognizes and parses DB2 SQL statements embedded in HLASM code
 - **Macro Expansion**: Handles macro definitions and expansions, including copybook inclusion
 - **Control Flow Analysis**: Builds control flow graphs (CFG) to visualize program execution paths
-- **Dependency Tracking**: Identifies and tracks dependencies between HLASM modules
+- **Dependency Tracing**: Identifies and tracks dependencies between HLASM modules
 - **Cyclomatic Complexity**: Calculates cyclomatic complexity metrics for code sections
 - **Neo4J Integration**: Stores analysis results in Neo4J graph database for advanced querying
 - **API Access**: Provides Model Context Protocol (MCP) server for programmatic access to analysis capabilities
-
-## Project Structure
-
-The project consists of several Maven modules that work together to provide a comprehensive solution for HLASM code analysis:
-
-### hlasm-parser
-
-**Purpose**: Contains the ANTLR4 grammar definitions for HLASM (including DB2 SQL embedded in HLASM) and generates the parser code.
-
-**Key Dependencies**:
-- ANTLR4 (4.13.1): For grammar definition and parser generation
-- Lombok: For reducing boilerplate code
-
-**Key Features**:
-- Comprehensive grammar for HLASM instructions
-- Support for DB2 SQL embedded in HLASM
-- Generated lexer and parser classes for HLASM code processing
-
-**Build Configuration**:
-- Uses ANTLR4 Maven plugin to generate parser code from grammar files
-- Grammar files are located in the `grammar` directory
-- Generated parser code is placed in the `com.mojo.hlasm` package
-
-### hlasm-format-loader
-
-**Purpose**: Responsible for generating ANTLR4 grammar for HLASM based on instruction format definitions.
-
-**Key Dependencies**:
-- hlasm-parser: For the base HLASM grammar and parser
-- Apache Commons CSV: For processing CSV files containing instruction format definitions
-- Apache Commons Lang3: For additional utility functions
-- Guava: For utility functions
-- Lombok: For reducing boilerplate code
-
-**Key Features**:
-- Processes instruction format definitions
-- Generates grammar rules based on instruction formats
-- Enhances the base HLASM grammar with additional instruction formats
-
-### hlasm-graph-loader
-
-**Purpose**: Provides utilities for loading, parsing, and analyzing HLASM code, building control flow graphs, and storing them in a Neo4J database.
-
-**Key Dependencies**:
-- hlasm-format-loader: For enhanced HLASM grammar and parsing
-- [mojo-common](https://github.com/asengupta/mojo-common): Common Intermediate Language support
-- woof: For Neo4J database interaction
-- JGraphT: For graph operations (core, ext, and io components)
-- Jackson Databind: For JSON processing
-- Gson: For JSON processing
-- Guava: For utility functions
-- Lombok: For reducing boilerplate code
-- Apache Commons CSV: For CSV processing
-- Apache Commons Lang3: For additional utility functions
-
-**Key Features**:
-- Parses HLASM code using the parser from hlasm-parser
-- Builds control flow graphs (CFG) from parsed HLASM code
-- Analyzes code structure and relationships
-- Stores analysis results in Neo4J database using the woof module
-
-**Key Classes**:
-- `HlasmCodeAnalysis`: Main entry point for code analysis
-- `CFGBuilder`: Builds control flow graphs from parsed HLASM code
-- `HLASMTracer`: Traces execution paths through the control flow graph
-
-### hlasm-mcp-server
-
-**Purpose**: Implements a server component that provides API endpoints for interacting with the HLASM analysis functionality.
-
-**Key Dependencies**:
-- hlasm-graph-loader: For HLASM code analysis and CFG generation
-- woof: For Neo4J database interaction
-- Model Context Protocol (MCP) SDK: For API endpoint implementation
-- SLF4J and Logback: For logging
-- JGraphT: For graph operations
-- Jackson Databind: For JSON processing
-- Gson: For JSON processing
-- Guava: For utility functions
-- Lombok: For reducing boilerplate code
-
-**Key Features**:
-- Provides API endpoints for HLASM code analysis
-- Integrates with the Model Context Protocol
-- Serves as a server component for client applications
-
-**Build Configuration**:
-- Uses Maven Assembly Plugin to create a standalone JAR with dependencies
-- Main class: `com.mojo.mcp.server.HlasmMCPToolServer`
-
-### mojo-common
-
-**Purpose**: A utility module that provides common algorithms and data structures for code analysis, particularly focused on control flow graph generation and manipulation.
-
-**Key Dependencies**:
-- woof: For graph database operations
-- JGraphT: For graph data structures and algorithms
-- Lombok: For reducing boilerplate code
-- Apache Commons Lang3: For utility functions
-- Guava: For utility functions
-- Vavr: For functional programming constructs
-
-**Key Features**:
-- Provides algorithms for building and analyzing basic blocks
-- Supports control flow graph generation and manipulation
-- Contains common data structures for code representation
-- Offers utilities for code analysis tasks
-
-mojo-common is the same Intermediate Language library that powers [Cobol-REKT](https://github.com/avishek-sen-gupta/cobol-rekt).
-
-### woof
-
-**Purpose**: A utility module that serves as a graph database interface layer, specifically for Neo4J, used by other modules to store and query the analyzed HLASM code.
-
-**Key Dependencies**:
-- Neo4j Java Driver: For interacting with Neo4j graph database
-- Lombok: For reducing boilerplate code
-- Apache Commons Lang3: For additional utility functions
-- Guava: For utility functions
-- Azure AI OpenAI SDK: For AI-assisted analysis capabilities
-
-**Key Features**:
-- Provides a simplified interface for Neo4J database operations
-- Handles graph data storage and retrieval
-- Supports complex graph queries
-- Includes utilities for working with graph data
-
-**Key Classes**:
-- `GraphSDK`: Main entry point for graph database operations
-- `Neo4JDriverBuilder`: Builds Neo4J driver instances
-- `WoofNode` and `WoofEdge`: Represent nodes and edges in the graph
-
-## Module Interactions
-
-The HLASM Analyser modules are designed to work together in a layered architecture:
-
-1. **hlasm-parser** forms the foundation, providing the core grammar and parsing capabilities.
-
-2. **hlasm-format-loader** extends the parser by adding support for additional instruction formats.
-
-3. **mojo-common** provides common algorithms and data structures for code analysis, particularly for control flow graph generation and manipulation.
-
-4. **hlasm-graph-loader** builds on the parser modules and uses mojo-common to analyze HLASM code and generate control flow graphs.
-
-5. **hlasm-mcp-server** provides a server interface to the analysis capabilities, making them accessible via API endpoints.
-
-6. **woof** is used by both hlasm-graph-loader and hlasm-mcp-server to store and retrieve graph data from Neo4J, and is also used by mojo-common for some graph operations.
-
-The typical workflow is:
-1. HLASM code is parsed using the grammar from hlasm-parser and hlasm-format-loader
-2. The parsed code is analyzed by hlasm-graph-loader using algorithms from mojo-common to build control flow graphs
-3. The analysis results are stored in Neo4J using the woof module
-4. The hlasm-mcp-server provides API access to the analysis capabilities and results
-
-## Analysis Pipeline
-
-The HLASM Analyser processes code through a sophisticated multi-stage pipeline:
-
-1. **File Reading**: The source HLASM file is read line by line.
-
-2. **Line Truncation**: Lines are truncated beyond column 72, following HLASM standards.
-
-3. **Macro Expansion**: Macros are expanded, and copybooks are included.
-
-4. **Label Block Extraction**: Labeled blocks are identified and extracted.
-
-5. **Line Continuation Handling**: Continued lines are collapsed into single logical lines.
-
-6. **HLASM Parsing**: The code is parsed using the ANTLR4-generated parser.
-
-7. **SQL Parsing**: Embedded SQL statements are identified and parsed.
-
-8. **Macro Processing**: Both structured and unstructured macros are processed.
-
-9. **External Call Resolution**: External calls to other modules are resolved.
-
-10. **Dependency Tracking**: Dependencies between modules are identified and tracked.
-
-11. **Code Flattening**: The hierarchical code structure is flattened for analysis.
-
-12. **Control Flow Graph Generation**: A control flow graph is built from the flattened code.
-
-13. **Cyclomatic Complexity Calculation**: Complexity metrics are calculated for code sections.
-
-14. **Independent Component Identification**: Independent code components are identified.
-
-This pipeline ensures comprehensive analysis of HLASM code, capturing not only the syntactic structure but also the semantic relationships and control flow.
 
 ## Getting Started
 
@@ -233,8 +57,8 @@ Before you begin, ensure you have the following installed:
 
 1. Clone the repository:
    ```bash
-   git clone --recurse-submodules -j8 https://github.com/avishek-sen-gupta/hlasm-analyser.git
-   cd hlasm-analyser
+   git clone --recurse-submodules -j8 https://github.com/avishek-sen-gupta/tape-z.git
+   cd tape-z
    ```
 
 Or, if you have already cloned the repository without submodules, you can use:
@@ -256,25 +80,32 @@ git submodule update --init --recursive
    ```
 
 4. (Optional) Install Neo4J:
-   - Download from [Neo4J Download Page](https://neo4j.com/download/)
-   - Follow the installation instructions for your platform
-   - Start the Neo4J server before running the HLASM Analyser with Neo4J integration
+    - Download from [Neo4J Download Page](https://neo4j.com/download/)
+    - Follow the installation instructions for your platform
+    - Start the Neo4J server before running any code which needs Neo4J integration
 
-## Usage Examples
+## Programmatic Usage
 
-### Using the Command Line Interface (CLI)
+### Control Flow Graph
+- See ```HLASMCFGMain``` for running the analysis pipeline.
+- The ```HlasmCodeAnalysisResult``` structure contains the following important results:
+    - ```controlFlowGraph``` is the Control Flow Graph.
+    - ```complexitiesByLabel``` contains a map of sections and their cyclomatic complexities.
+    - ```flattened``` contains the list of all instructions. These are ```TranspilerInstructions``` with the appropriate ```TranspilerNode``` instances.
+    - ```dependencyMap``` contains the call relations between different HLASM programs. The technique for determining what constitutes a call to an external program is still somewhat specific, and will be refined later.
+- Use ```ExportCFGToNeo4JTask``` to export the CFG to Neo4J.
 
-The HLASM Analyser provides a command-line interface (CLI) built with PicoCLI that offers multiple commands for analyzing and visualizing HLASM code.
+![Sample CFG in Neo4J](documentation/images/cfg-neo4j.png)
 
-#### Building the CLI
+### Flowchart
 
-To build the CLI, run the following command from the project root:
+- See ```HLASMFlowchartMain``` to see how to build a flowchart.
+    - Pass in a ```VerbatimBasicBlockTextMaker``` instance if you do not wish to use AI summarise. Otherwise, pass in an ```AIBasicBlockTextMaker``` instance.
+    - Use ```ExportFlowchartToNeo4JTask``` to export the flowchart to Neo4J.
 
-```bash
- mvn clean install
-```
+## CLI Usage
 
-This will create an executable JAR file in the `hlasm-analyser-cli/target` directory.
+Tape/Z provides a command-line interface (CLI) built with PicoCLI that offers multiple commands for analysing and visualizing HLASM code, through the ```tapez-cli``` JAR. These outputs can be used for further analysis, visualization, or integration with other tools.
 
 #### Available Commands
 
@@ -284,45 +115,49 @@ The CLI provides the following commands:
 2. **flowchart**: Builds a flowchart for the entire program in one go
 3. **flowchart-sections**: Builds flowcharts for all sections of the program, section by section
 
-#### Command: cfg-to-json
+### Command: cfg-to-json
 
-This command analyzes a HLASM file and exports its control flow graph to JSON format.
+This command analyses a HLASM file and exports its control flow graph to JSON format.
 
 **Parameters:**
-- Path to the HLASM file to analyze (positional parameter)
+- Path to the HLASM file to analyse (positional parameter)
 - `-c, --copybook`: Path to the copybook directory (required)
 - `-o, --output`: Path where the output JSON file will be written (required)
 - `-e, --external`: Path for external programs (required)
 
 **Example:**
 ```bash
-java -jar hlasm-analyser-cli/target/hlasm-analyser-cli-1.0-SNAPSHOT.jar cfg-to-json /path/to/my/hlasm/file.txt -c /path/to/copybook/directory -o /path/to/output/cfg.json -e /path/to/external/programs
+java -jar tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar cfg-to-json /path/to/my/hlasm/file.txt -c /path/to/copybook/directory -o /path/to/output/cfg.json -e /path/to/external/programs
 ```
 
-#### Command: flowchart
+### Command: flowchart
 
 This command builds a flowchart visualization for the entire HLASM program.
 
 **Parameters:**
-- HLASM program name to analyze (positional parameter)
+- HLASM program name to analyse (positional parameter)
 - `-s, --srcDir`: The HLASM source directory (required)
 - `-cp, --copyBooksDir`: Copybook directory (required)
 - `-o, --outputDir`: Output directory (required)
 - `-e, --external`: Path for external programs (required)
 - `-m, --model`: Foundation model to use (optional)
 
-**Example:**
+**Example**
 
 ```bash
-OLLAMA_ENDPOINT=http://<ollama.endpoint> java -jar hlasm-analyser-cli/target/hlasm-analyser-cli-1.0-SNAPSHOT.jar flowchart -s /path/to/source/dir -cp /path/to/copybook/dir -o /path/to/output/dir -e /path/to/external/programs -m OLLAMA program.txt
+OLLAMA_ENDPOINT=http://<ollama.endpoint> java -jar tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar flowchart -s /path/to/source/dir -cp /path/to/copybook/dir -o /path/to/output/dir -e /path/to/external/programs -m OLLAMA program.txt
 ```
 
-#### Command: flowchart-sections
+NOTE: The command above requires an Ollama endpoint to be running to summarise the contents of the flowchart blocks. If you don't wish to do the summarisation, leave out the ```-m``` parameter.
+
+![simple-flowchart](documentation/images/flowchart.svg)
+
+### Command: flowchart-sections
 
 This command builds flowcharts for all sections of the HLASM program, section by section.
 
 **Parameters:**
-- HLASM program name to analyze (positional parameter)
+- HLASM program name to analyse (positional parameter)
 - `-s, --srcDir`: The HLASM source directory (required)
 - `-cp, --copyBooksDir`: Copybook directory (required)
 - `-o, --outputDir`: Output directory (required)
@@ -332,46 +167,51 @@ This command builds flowcharts for all sections of the HLASM program, section by
 **Example:**
 
 ```bash
-OLLAMA_ENDPOINT=http://<ollama.endpoint> java -jar hlasm-analyser-cli/target/hlasm-analyser-cli-1.0-SNAPSHOT.jar flowchart-sections -s /path/to/source/dir -cp /path/to/copybook/dir -o /path/to/output/dir -e /path/to/external/programs -m OLLAMA program.txt
+OLLAMA_ENDPOINT=http://<ollama.endpoint> java -jar tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar flowchart-sections -s /path/to/source/dir -cp /path/to/copybook/dir -o /path/to/output/dir -e /path/to/external/programs -m OLLAMA program.txt
 ```
 
-#### CLI Help
+### CLI Help
 
 To see all available commands and general help information:
 
 ```bash
-java -jar hlasm-analyser-cli/target/hlasm-analyser-cli-1.0-SNAPSHOT.jar --help
+java -jar tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar --help
 ```
 
 To see help for a specific command:
 
 ```bash
-java -jar hlasm-analyser-cli/target/hlasm-analyser-cli-1.0-SNAPSHOT.jar <command> --help
+java -jar tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar <command> --help
 ```
 
-#### What the CLI Does
+## Workflow
 
-The CLI provides tools for analyzing HLASM code, building control flow graphs, and generating visualizations:
+The typical workflow is:
+1. HLASM code is parsed using the grammar from hlasm-parser and hlasm-format-loader
+2. The parsed code is analysed by hlasm-graph-loader using algorithms from mojo-common to build control flow graphs
+3. The analysis results are stored in Neo4J using the woof module
+4. The hlasm-mcp-server provides API access to the analysis capabilities and results
 
-- **cfg-to-json**: Outputs a JSON representation of the control flow graph, containing nodes representing code elements and edges representing control flow between them.
-- **flowchart**: Generates a visual flowchart (in DOT and SVG formats) for the entire program.
-- **flowchart-sections**: Generates separate flowcharts for each section of the program, providing more detailed visualizations of specific program components.
+## Analysis Pipeline
 
-These outputs can be used for further analysis, visualization, or integration with other tools.
+The library processes code through a pipeline which runs multiple passes on the code:
 
+- **File Reading**: The source HLASM file is read line by line.
+- **Line Truncation**: Lines are truncated beyond column 72, following HLASM standards.
+- **Macro Expansion**: Macros are expanded, and copybooks are included.
+- **Label Block Extraction**: Labeled blocks are identified and extracted.
+- **Line Continuation Handling**: Continued lines are collapsed into single logical lines.
+- **HLASM Parsing**: The code is parsed using the ANTLR4-generated parser.
+- **SQL Parsing**: Embedded SQL statements are identified and parsed.
+- **Macro Processing**: Both structured and unstructured macros are processed.
+- **External Call Resolution**: External calls to other modules are resolved.
+- **Dependency Tracking**: Dependencies between modules are identified and tracked.
+- **Code Flattening**: The hierarchical code structure is flattened for analysis.
+- **Control Flow Graph Generation**: A control flow graph is built from the flattened code.
+- **Cyclomatic Complexity Calculation**: Complexity metrics are calculated for code sections.
+- **Independent Component Identification**: Independent code components are identified.
 
-## Development
-
-### Project Dependencies
-
-- ANTLR4 (4.13.1) for grammar definition and parser generation
-- Guava for utility functions
-- Lombok for reducing boilerplate code
-- Apache Commons CSV for CSV processing
-- Apache Commons Lang3 for additional utility functions
-- JUnit 5 for testing
-
-## Useful Neo4J queries
+## Useful Neo4J queries for my own reference
 
 Identify dead code
 
@@ -397,7 +237,7 @@ MATCH (n)-[r]->(d) RETURN n,r,d
 
 ## Contributing
 
-Contributions to HLASM Analyser are welcome! Here's how you can contribute:
+Contributions to Tape/Z are welcome! Here's how you can contribute:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -412,7 +252,7 @@ Please make sure to update tests as appropriate and follow the existing code sty
 If you encounter any bugs or have feature requests, please file an issue on the GitHub repository. When reporting issues, please include:
 
 1. A clear and descriptive title
-2. Steps to reproduce the issue
+2. Steps to reproduce the issue, including a clear minimal example HLASM program where this issue occurs
 3. Expected behavior
 4. Actual behavior
 5. Any relevant logs or error messages

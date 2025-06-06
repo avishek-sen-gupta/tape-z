@@ -15,7 +15,7 @@
         <module>tapez-cli</module>
         <module>hlasm-format-loader</module>
         <module>hlasm-graph-loader</module>
-        <module>hlasm-mcp-server</module>
+        <module>tapez-mcp-server</module>
         <module>mojo-common</module>
         <module>woof</module>
     </modules>

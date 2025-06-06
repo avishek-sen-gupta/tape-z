@@ -21,7 +21,7 @@ import java.util.List;
 public class HLASMDepsMain {
     public static void main(String[] args) {
 //        String filePath = "/Users/asgupta/Documents/example.txt";
-        String filePath = "/Users/asgupta/code/asmcode/Root module/Root module_PSUNA02.txt";
+        String filePath = "/Users/asgupta/code/asmcode/Root module/main.txt";
         String copybookPath = "/Users/asgupta/code/asmcode/Assembler Copybook";
         String externalProgramsSearchPath = "/Users/asgupta/code/asmcode/Utilities_Assembler and Cobol";
         HlasmCodeAnalysisResult analysisResult = new HlasmCodeAnalysis(new UUIDProvider()).structure(filePath, copybookPath, externalProgramsSearchPath);

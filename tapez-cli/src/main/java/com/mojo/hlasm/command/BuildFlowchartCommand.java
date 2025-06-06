@@ -52,7 +52,7 @@ public class BuildFlowchartCommand implements Callable<Integer> {
         UUIDProvider idProvider = new UUIDProvider();
         HlasmCodeAnalysisResult analysisResult = new HlasmCodeAnalysis(idProvider, false).structure(filePath, copybookPath, externalProgramsSearchPath);
         Graph<TranspilerInstruction, TypedGraphEdge> cfg = analysisResult.controlFlowGraph();
-        new BuildSingleFlowchartTask().run(idProvider, outputDir, AdvisorFactory.advisor(model), programName, analysisResult.controlFlowGraph());
+        new BuildSingleFlowchartTask().run(analysisResult.controlFlowGraph(), programName, outputDir, AdvisorFactory.advisor(model), idProvider);
         System.out.println("COMPLETE!");
         return 0;
     }

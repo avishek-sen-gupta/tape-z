@@ -23,7 +23,7 @@ public class BuildFlowchartPerSectionTask {
         sectionsWithRawLines.forEach((sectionName, value) -> {
             System.out.printf("=============PROCESSING %s=============%n", sectionName);
             HlasmCodeAnalysisResult analysisResult = new HlasmCodeAnalysis(idProvider, false).structure(new InMemorySourceProvider(sectionName, sectionsWithRawLines.get(sectionName)), copybookPath, searchPath);
-            new BuildSingleFlowchartTask().run(idProvider, outputDir, basicBlockTextMaker, sectionName, analysisResult.controlFlowGraph());
+            new BuildSingleFlowchartTask().run(analysisResult.controlFlowGraph(), sectionName, outputDir, basicBlockTextMaker, idProvider);
         });
     }
 

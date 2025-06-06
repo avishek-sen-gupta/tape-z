@@ -14,7 +14,7 @@ public class TraceCFGMain {
 
     public static void main(String[] args) {
 //        String filePath = "/Users/asgupta/Documents/example.txt";
-        String filePath = "/Users/asgupta/code/asmcode/Root module/Root module_PSUNA02.txt";
+        String filePath = "/Users/asgupta/code/asmcode/Root module/main.txt";
 //        String filePath = "/Users/asgupta/code/hlasm/test.txt";
         HlasmCodeAnalysisResult analysisResult = new HlasmCodeAnalysis(new UUIDProvider()).structure(filePath, "/Users/asgupta/code/asmcode/Assembler Copybook", "/Users/asgupta/code/asmcode/Utilities_Assembler and Cobol");
         Graph<TranspilerInstruction, TypedGraphEdge> cfg = analysisResult.controlFlowGraph();

@@ -15,7 +15,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExternalCallMacroParsePass {
+
     private static final Logger logger = LoggerFactory.getLogger(ExternalCallMacroParsePass.class);
+    public static final String CALL_ROUTINE_INSTRUCTION = "NOLCALL";
     private final IdProvider idProvider;
     private Map<String, String> dependencies = new HashMap<>();
     private final ExternalCallResolutionStrategy filePathResolutionStrategy;
@@ -33,14 +35,14 @@ public class ExternalCallMacroParsePass {
     private CodeElement toMacro(CodeElement codeElement) {
         if (!(codeElement instanceof MacroElement)) return codeElement;
         String line = ((MacroElement) codeElement).getLine().trim();
-        if (!line.startsWith("NOLCALL"))
+        if (!line.startsWith(CALL_ROUTINE_INSTRUCTION))
             return codeElement;
         return macro(line);
     }
 
     private CodeElement macro(String line) {
         logger.debug("Possible call macro found: " + line);
-        Pattern compile = Pattern.compile("NOLCALL\\s+(\\w+)(?:,\\(?([^)]*)\\))?");
+        Pattern compile = Pattern.compile(String.format("%s\\s+(\\w+)(?:,\\(?([^)]*)\\))?", CALL_ROUTINE_INSTRUCTION));
         Matcher matcher = compile.matcher(line.trim());
         if (!matcher.find())
             throw new RuntimeException("No call macro target found: " + line);

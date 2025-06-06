@@ -3,7 +3,7 @@ package com.mojo.visualisation;
 import com.mojo.algorithms.domain.BasicBlock;
 import com.mojo.algorithms.domain.TranspilerInstruction;
 import com.mojo.algorithms.domain.TypedGraphEdge;
-import com.mojo.algorithms.id.UUIDProvider;
+import com.mojo.algorithms.id.IdProvider;
 import com.mojo.algorithms.string.TranspilerNodeFormatter;
 import com.mojo.algorithms.transpiler.IfTranspilerNode;
 import com.mojo.algorithms.visualisation.FlowchartOutputFormat;
@@ -33,12 +33,12 @@ import static guru.nidi.graphviz.model.Factory.mutNode;
 
 public class DrawSummarisedFlowchartTask {
     private final Graph<BasicBlock<SummarisedBasicBlock>, TypedGraphEdge> blockGraph;
-    private final UUIDProvider idProvider;
+    private final IdProvider idProvider;
     private final MutableGraph graph;
     Logger LOGGER = LoggerFactory.getLogger(DrawSummarisedFlowchartTask.class.getName());
     private final TranspilerNodeFormatter textFormatter = new TranspilerNodeFormatter();
 
-    public DrawSummarisedFlowchartTask(Graph<BasicBlock<SummarisedBasicBlock>, TypedGraphEdge> summarisedBlockGraph, UUIDProvider idProvider) {
+    public DrawSummarisedFlowchartTask(Graph<BasicBlock<SummarisedBasicBlock>, TypedGraphEdge> summarisedBlockGraph, IdProvider idProvider) {
         this.blockGraph = summarisedBlockGraph;
         this.idProvider = idProvider;
         graph = Factory.mutGraph("example1").setDirected(true).setCluster(true);
@@ -112,7 +112,7 @@ public class DrawSummarisedFlowchartTask {
             return HLASMFlowchartStylePreferences.SECTION_END;
         else if (actualBB.size() == 1 && actualBB.firstInstruction() instanceof MarkerInstruction)
             return HLASMFlowchartStylePreferences.JOIN;
-        // Hides empty ELSE clauses
+            // Hides empty ELSE clauses
         else if (blockGraph.incomingEdgesOf(v).size() > 1) return HLASMFlowchartStylePreferences.JOIN;
         else if (actualBB.size() == 2 &&
                  actualBB.firstInstruction() instanceof MarkerInstruction &&

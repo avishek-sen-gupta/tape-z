@@ -15,12 +15,10 @@ import java.util.stream.Collectors;
 
 public class HLASMCFGMain {
     public static void main(String[] args) {
-//        String filePath = "/Users/asgupta/Documents/example.txt";
-//        String filePath = "/Users/asgupta/code/asmcode/Utilities_Assembler and Cobol/UTUNA03_ASMSQL.txt";
-//        String filePath = "/Users/asgupta/code/asmcode/Utilities_Assembler and Cobol/UTVPU_ASMSQL.txt";
-        String filePath = "/Users/asgupta/code/asmcode/Root Module/Root module_PSUNA02.txt";
+//        String filePath = "/Users/asgupta/code/asmcode/Root Module/main.txt";
 //        String filePath = "/Users/asgupta/code/hlasm/test.txt";
 //        String filePath = "/Users/asgupta/code/hlasm/simple.txt";
+        String filePath = "/Users/asgupta/code/hlasm/flowchart-hlasm.txt";
         String copybookPath = "/Users/asgupta/code/asmcode/Assembler Copybook";
         HlasmCodeAnalysisResult analysisResult = new HlasmCodeAnalysis(new UUIDProvider(), false).structure(filePath, copybookPath, "/Users/asgupta/code/asmcode/Utilities_Assembler and Cobol");
         Graph<TranspilerInstruction, TypedGraphEdge> cfg = analysisResult.controlFlowGraph();
@@ -29,7 +27,7 @@ public class HLASMCFGMain {
         System.out.println("Untouched instructions: ");
         difference.forEach(System.out::println);
 
-        new ExportCFGToNeo4JTask(new Neo4JDriverBuilder()).run(cfg, false);
+        new ExportCFGToNeo4JTask(new Neo4JDriverBuilder()).run(cfg, true);
 
         System.out.println("COMPLETE!");
     }
