@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mojo.tapez</groupId>
+    <artifactId>tape-z</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>tape-z</name>
+
+    <modules>
+        <module>hlasm-parser</module>
+        <module>tapez-cli</module>
+        <module>hlasm-format-loader</module>
+        <module>hlasm-graph-loader</module>
+        <module>hlasm-mcp-server</module>
+        <module>mojo-common</module>
+        <module>woof</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+    </properties>
+</project>

@@ -1,0 +1,6 @@
+[submodule "woof"]
+	path = woof
+	url = https://github.com/asengupta/woof
+[submodule "mojo-common"]
+	path = mojo-common
+	url = https://github.com/asengupta/mojo-common

@@ -1,0 +1,13 @@
+fileignoreconfig:
+- filename: mojo-common
+  checksum: d4373e6536aa784caefa7e8e7b8d80981e94a0f7130d15a2f5436242da5cb466
+- filename: woof
+  checksum: 7d588457269a756bd01fbea071f543692092ac1f201e319ca2766165574923cd
+- filename: hlasm-graph-loader/src/main/java/com/mojo/loader/main/IndependentComponentsPass.java
+  checksum: 968b226780082146ba423166ab9ebc5eeff08652c7956a408de15636c1db2ce7
+- filename: README.md
+  checksum: f9ede3a660278830465b7d8856bb38c861322bc9c6086d728a2da1d6c1a69054
+- filename: hlasm-parser/grammar/Db2SqlLexer.g4
+  checksum: 6f7a5037ca0d4ec8cc4b9a6cfad6e0f4df32817b2c3103dfb61499b627e67339
+- filename: hlasm-parser/grammar/Db2SqlParser.g4
+  checksum: 2671085ac096cd41f5908ef2126a9f7495d3a3cc1307aef7afdd318d5a5be4ca
