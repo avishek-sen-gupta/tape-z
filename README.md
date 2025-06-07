@@ -8,7 +8,7 @@
 
 ![logo](documentation/images/logo.png)
 
-Tape/Z is an evolving toolkit for analysing HLASM (High Level Assembler) code. The library provides capabilities for working with mainframe assembler code, including parsing, control flow analysis, dependency tracing, and flowchart visualization capabilities.
+Tape/Z is an evolving toolkit for analysing mainframe HLASM (High Level Assembler) code. The library provides capabilities for working with mainframe assembler code, including parsing, control flow graph building, dependency tracing, and flowchart visualization capabilities.
 
 ## Table of Contents
 - [Project Overview](#project-overview)
