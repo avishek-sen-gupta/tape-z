@@ -1,58 +1,106 @@
+# Java
 target/
-coverage/
-.settings/
-.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+.mvn/wrapper/maven-wrapper.jar
 
-# Compiled source #
-###################
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
-
-# Packages #
-############
-*.jar
-
-# Logs and databases #
-######################
-*.log
-*.sqlite
-
-# OS generated files #
-######################
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-
-# IntelliJ Idea #
-#################
+# IntelliJ IDEA
 .idea/
 *.iml
 
+# Compiled class file
+*.class
 
-**/*ForTestingOnly.java
-**/*ForProduction.java
+# Mac
+.DS_Store
 
-out/
-**/__pycache__
-**/.python-version
-**/.env
-**/local.env.sh
-**/.run/
+# ANTLR
+.antlr
+.history
 
-**/*.sqlite
-**/gen/
-**/*.tokens
-**/op.json
+# Generated grammar files (from build process)
+hlasm-parser/src/main/antlr4/HLASMInstructionParser.g4
+hlasm-parser/src/main/antlr4/HLASMInstructionLexer.g4
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.pytest_cache/
+.hypothesis/
+
+# Poetry
+poetry.lock
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre
+.pyre/
+
+# pytype
+.pytype/
+
+# Neo4J
+neo4j/
+
+# Output files
 output/
 *.svg
-*.dot
-
+*.png
+*.pdf

@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "tapez"
+version = "1.0.0"
+description = "Tools for Assembly Program Exploration for Z/OS - Python Edition"
+authors = ["Avishek Sen Gupta"]
+license = "MIT"
+readme = "README_PYTHON.md"
+packages = [{include = "tapez"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+antlr4-python3-runtime = "^4.13.1"
+click = "^8.1.7"
+networkx = "^3.2"
+neo4j = "^5.14.0"
+graphviz = "^0.20.1"
+pydantic = "^2.5.0"
+pydantic-settings = "^2.1.0"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+pytest-cov = "^4.1.0"
+black = "^23.12.0"
+ruff = "^0.1.8"
+mypy = "^1.7.1"
+
+[tool.poetry.scripts]
+tapez = "tapez.cli.main:cli"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
