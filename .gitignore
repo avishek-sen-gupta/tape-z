@@ -53,6 +53,5 @@ out/
 **/*.tokens
 **/op.json
 output/
-*.svg
 *.dot
 
