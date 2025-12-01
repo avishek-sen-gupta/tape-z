@@ -150,7 +150,7 @@ OLLAMA_ENDPOINT=http://<ollama.endpoint> java -jar tapez-cli/target/tapez-cli-1.
 
 NOTE: The command above requires an Ollama endpoint to be running to summarise the contents of the flowchart blocks. If you don't wish to do the summarisation, leave out the ```-m``` parameter.
 
-![simple-flowchart](documentation/images/flowchart.svg)
+![simple-flowchart](/documentation/images/flowchart.svg)
 
 ### Command: flowchart-sections
 

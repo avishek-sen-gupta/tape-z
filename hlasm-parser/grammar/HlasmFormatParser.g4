@@ -34,12 +34,3 @@ operand: displacement | floating_point_register_pair | floating_point_register |
     | base_register | register_pair | register_operand |  control_register | immediate_value | signed_immediate_value
     | length_field | mask_field | relative_immediate_operand | vector_register_pair | vector_register
     | optionalMaskField | optionalSignedImmediateValue | optionalRegister | access_register;
-expression
-    : expression ('*'|'/') expression
-    | expression ('+'|'-') expression
-    | expression ('=='|'!='|'<'|'>'|'<='|'>=') expression
-    | expression ('&&'|'||') expression
-    | '(' expression ')'
-    | INTEGER_LITERAL
-    | STRING_LITERAL
-    ;
