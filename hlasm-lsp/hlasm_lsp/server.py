@@ -139,6 +139,19 @@ def create_server() -> LanguageServer:
             )
         )
 
+    from hlasm_lsp.completion import get_completions
+
+    @server.feature(
+        types.TEXT_DOCUMENT_COMPLETION,
+        types.CompletionOptions(trigger_characters=[" ", ","]),
+    )
+    def completions(params: types.CompletionParams) -> list[types.CompletionItem]:
+        uri = params.text_document.uri
+        index = documents.get(uri)
+        if index is None:
+            return []
+        return get_completions(index)
+
     from hlasm_lsp.symbols import get_document_symbols
 
     @server.feature(types.TEXT_DOCUMENT_DOCUMENT_SYMBOL)
