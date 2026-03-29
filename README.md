@@ -15,6 +15,8 @@ Tape/Z is an evolving toolkit for analysing mainframe HLASM (High Level Assemble
 - [Getting Started](#getting-started)
 - [Programmatic Usage](#programmatic-usage)
 - [CLI Usage](#cli-usage)
+- [Tree-sitter Grammar](#tree-sitter-grammar)
+- [HLASM LSP Server](#hlasm-lsp-server)
 - [Workflow](#workflow)
 - [Analysis Pipeline](#analysis-pipeline)
 - [Useful Neo4J Queries](#useful-neo4j-queries-for-my-own-reference)
@@ -193,6 +195,89 @@ To see help for a specific command:
 
 ```bash
 java -jar java/tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar <command> --help
+```
+
+## Tree-sitter Grammar
+
+The `tree-sitter-hlasm/` directory contains a [tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammar for HLASM. It provides fast, incremental parsing suitable for editor integration and syntax highlighting.
+
+### Features
+
+- Full statement parsing: labels, operations, operands (including address operands like `D(X,B)`)
+- DC/DS data definition operands with type specs, modifiers, and values
+- Self-defining terms: hexadecimal (`X'FF'`), binary (`B'1010'`), character (`C'ABC'`)
+- Literals (`=F'200'`, `=A(*)`)
+- Variable symbols (`&name`), sequence symbols (`.name`)
+- Expressions with arithmetic operators
+- Comment lines and macro comments
+- Syntax highlighting queries (`queries/highlights.scm`)
+
+### Building
+
+```bash
+make grammar    # generates parser and runs tests
+```
+
+Or manually:
+
+```bash
+cd tree-sitter-hlasm
+npx tree-sitter generate
+npx tree-sitter test
+```
+
+## HLASM LSP Server
+
+The `hlasm-lsp/` directory contains a Python-based Language Server Protocol (LSP) server built on the tree-sitter grammar. It provides real-time editor support for HLASM files.
+
+### Capabilities
+
+| Feature | Description |
+|---------|-------------|
+| **Diagnostics** | Reports parse errors in real time |
+| **Semantic Tokens** | Syntax highlighting for keywords, mnemonics, labels, registers, strings, etc. |
+| **Go to Definition** | Jump from a symbol reference to its label/EQU definition |
+| **Find References** | Find all usages of a label or symbol |
+| **Hover** | Shows EQU values, instruction format/description, DC type meanings |
+| **Document Symbols** | Outline view with CSECT/DSECT sections and their labels |
+| **Completion** | Autocomplete for instruction mnemonics, assembler directives, registers (R0-R15), defined labels, and DC/DS types |
+| **Code Folding** | Fold MACRO...MEND blocks, sections, and consecutive comment blocks |
+
+### Running
+
+```bash
+cd hlasm-lsp
+poetry install
+poetry run python -m hlasm_lsp
+```
+
+### VS Code Integration
+
+A VS Code extension is included in `hlasm-lsp/vscode-extension/`:
+
+1. Install dependencies:
+   ```bash
+   cd hlasm-lsp/vscode-extension
+   npm install
+   ```
+
+2. Open `hlasm-lsp/vscode-extension/` in VS Code and press **F5** to launch the Extension Development Host.
+
+3. Open any `.hlasm` or `.asm` file in the new window.
+
+4. If needed, configure the Python path in settings:
+   ```json
+   {
+     "hlasmLsp.pythonPath": "/path/to/poetry/virtualenv/bin/python"
+   }
+   ```
+
+   Find the path with: `cd hlasm-lsp && poetry env info -e`
+
+### Testing
+
+```bash
+make test-lsp   # runs Black check + all 42 pytest tests
 ```
 
 ## Workflow
