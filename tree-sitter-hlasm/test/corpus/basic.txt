@@ -1,0 +1,78 @@
+================================================================================
+Full-line comment
+================================================================================
+* This is a comment
+================================================================================
+
+(source_file
+  (comment_line
+    (comment_text)))
+
+================================================================================
+EQU statement
+================================================================================
+R14      EQU   14
+================================================================================
+
+(source_file
+  (instruction_statement
+    label: (label
+      (symbol))
+    operation: (operation
+      (symbol))
+    operands: (operands
+      (expression
+        (number)))))
+
+================================================================================
+Instruction with address operand
+================================================================================
+         STM   R14,R12,12(R13)
+================================================================================
+
+(source_file
+  (instruction_statement
+    operation: (operation
+      (symbol))
+    operands: (operands
+      (expression
+        (symbol))
+      (expression
+        (symbol))
+      (address_operand
+        (number)
+        (expression
+          (symbol))))))
+
+================================================================================
+DC with fullword constant
+================================================================================
+FWORD    DC    F'200'
+================================================================================
+
+(source_file
+  (instruction_statement
+    label: (label
+      (symbol))
+    operation: (operation
+      (symbol))
+    operands: (operands
+      (dc_operand
+        type_spec: (dc_type_spec)
+        value: (dc_value)))))
+
+================================================================================
+DS without value
+================================================================================
+AREA     DS    0H
+================================================================================
+
+(source_file
+  (instruction_statement
+    label: (label
+      (symbol))
+    operation: (operation
+      (symbol))
+    operands: (operands
+      (dc_operand
+        type_spec: (dc_type_spec)))))

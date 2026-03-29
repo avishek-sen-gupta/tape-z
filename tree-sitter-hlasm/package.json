@@ -1,0 +1,60 @@
+{
+  "name": "tree-sitter-hlasm",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for IBM HLASM (High Level Assembler)",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "keywords": [
+    "tree-sitter",
+    "hlasm",
+    "assembler",
+    "mainframe",
+    "z/OS"
+  ],
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "node-addon-api": "^7.1.0",
+    "node-gyp-build": "^4.8.0"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.22.0",
+    "prebuildify": "^6.0.0"
+  },
+  "scripts": {
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "parse": "tree-sitter parse",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.hlasm",
+      "file-types": [
+        "hlasm",
+        "asm",
+        "s",
+        "mac",
+        "copy"
+      ],
+      "highlights": "queries/highlights.scm",
+      "injection-regex": "hlasm"
+    }
+  ]
+}

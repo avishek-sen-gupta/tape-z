@@ -1,0 +1,99 @@
+================================================================================
+Arithmetic expression with location counter
+================================================================================
+HERE     B     *+8
+================================================================================
+
+(source_file
+  (instruction_statement
+    label: (label
+      (symbol))
+    operation: (operation
+      (symbol))
+    operands: (operands
+      (expression
+        (binary_expression
+          (expression
+            (location_counter))
+          (expression
+            (number)))))))
+
+================================================================================
+USING with location counter and register
+================================================================================
+         USING *,R15
+================================================================================
+
+(source_file
+  (instruction_statement
+    operation: (operation
+      (symbol))
+    operands: (operands
+      (expression
+        (location_counter))
+      (expression
+        (symbol)))))
+
+================================================================================
+Literal in operand
+================================================================================
+         L     R2,=F'80'
+================================================================================
+
+(source_file
+  (instruction_statement
+    operation: (operation
+      (symbol))
+    operands: (operands
+      (expression
+        (symbol))
+      (expression
+        (literal
+          (dc_type_spec)
+          (dc_value))))))
+
+================================================================================
+DC with address expression
+================================================================================
+MSGADDR  DC    A(MESSAGE)
+================================================================================
+
+(source_file
+  (instruction_statement
+    label: (label
+      (symbol))
+    operation: (operation
+      (symbol))
+    operands: (operands
+      (dc_operand
+        type_spec: (dc_type_spec)
+        value: (dc_value
+          (expression
+            (symbol)))))))
+
+================================================================================
+Variable symbol in operand
+================================================================================
+         GBLA  &COUNTER
+================================================================================
+
+(source_file
+  (instruction_statement
+    operation: (operation
+      (symbol))
+    operands: (operands
+      (expression
+        (variable_symbol)))))
+
+================================================================================
+Sequence symbol as label
+================================================================================
+.LOOP    ANOP
+================================================================================
+
+(source_file
+  (instruction_statement
+    label: (label
+      (sequence_symbol))
+    operation: (operation
+      (symbol))))
