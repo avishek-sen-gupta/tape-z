@@ -77,6 +77,25 @@ def create_server() -> LanguageServer:
             prev_char = token.character
         return types.SemanticTokens(data=data)
 
+    from hlasm_lsp.definition import find_definition
+
+    @server.feature(types.TEXT_DOCUMENT_DEFINITION)
+    def goto_definition(params: types.DefinitionParams) -> types.Location | None:
+        uri = params.text_document.uri
+        index = documents.get(uri)
+        if index is None:
+            return None
+        loc = find_definition(index, params.position.line, params.position.character)
+        if loc is None:
+            return None
+        return types.Location(
+            uri=loc.uri,
+            range=types.Range(
+                start=types.Position(line=loc.line, character=loc.character),
+                end=types.Position(line=loc.line, character=loc.end_character),
+            ),
+        )
+
     server._hlasm_parser = parser
     server._hlasm_documents = documents
 
