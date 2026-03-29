@@ -96,6 +96,31 @@ def create_server() -> LanguageServer:
             ),
         )
 
+    from hlasm_lsp.references import find_references as _find_references
+
+    @server.feature(types.TEXT_DOCUMENT_REFERENCES)
+    def references(params: types.ReferenceParams) -> list[types.Location]:
+        uri = params.text_document.uri
+        index = documents.get(uri)
+        if index is None:
+            return []
+        locs = _find_references(
+            index,
+            params.position.line,
+            params.position.character,
+            include_definition=params.context.include_declaration,
+        )
+        return [
+            types.Location(
+                uri=loc.uri,
+                range=types.Range(
+                    start=types.Position(line=loc.line, character=loc.character),
+                    end=types.Position(line=loc.line, character=loc.end_character),
+                ),
+            )
+            for loc in locs
+        ]
+
     server._hlasm_parser = parser
     server._hlasm_documents = documents
 
