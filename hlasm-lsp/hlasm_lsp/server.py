@@ -139,6 +139,16 @@ def create_server() -> LanguageServer:
             )
         )
 
+    from hlasm_lsp.folding import get_folding_ranges
+
+    @server.feature(types.TEXT_DOCUMENT_FOLDING_RANGE)
+    def folding_range(params: types.FoldingRangeParams) -> list[types.FoldingRange]:
+        uri = params.text_document.uri
+        index = documents.get(uri)
+        if index is None:
+            return []
+        return get_folding_ranges(index)
+
     from hlasm_lsp.completion import get_completions
 
     @server.feature(
