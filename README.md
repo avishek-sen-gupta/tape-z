@@ -45,6 +45,8 @@ Internally, it uses many of the same components and class infrastructure from [C
 - **Cyclomatic Complexity**: Calculates cyclomatic complexity metrics for code sections
 - **Neo4J Integration**: Stores analysis results in Neo4J graph database for advanced querying
 - **API Access**: Provides Model Context Protocol (MCP) server for programmatic access to analysis capabilities
+- **Tree-sitter Grammar**: A tree-sitter grammar for HLASM providing syntax highlighting, code folding, and structural parsing for editors
+- **LSP Server**: A Python-based Language Server Protocol server providing diagnostics, go-to-definition, find-references, hover, completion, semantic tokens, document symbols, and code folding for HLASM files in VS Code and other LSP-capable editors
 
 ## Getting Started
 
