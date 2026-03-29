@@ -50,15 +50,7 @@ def create_server() -> LanguageServer:
         uri = params.text_document.uri
         documents.pop(uri, None)
 
-    legend = types.SemanticTokensLegend(
-        token_types=TOKEN_TYPES,
-        token_modifiers=TOKEN_MODIFIERS,
-    )
-
-    @server.feature(
-        types.TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL,
-        types.SemanticTokensOptions(legend=legend, full=True),
-    )
+    @server.feature(types.TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL)
     def semantic_tokens_full(params: types.SemanticTokensParams) -> types.SemanticTokens:
         uri = params.text_document.uri
         index = documents.get(uri)

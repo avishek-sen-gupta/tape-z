@@ -18,7 +18,12 @@ def _find_csv_path() -> Path:
     if env_path:
         return Path(env_path)
     package_root = Path(__file__).resolve().parent.parent
-    return package_root.parent / "hlasm-parser" / "instruction_formats" / "HLASM Instruction Format.csv"
+    return (
+        package_root.parent
+        / "hlasm-parser"
+        / "instruction_formats"
+        / "HLASM Instruction Format.csv"
+    )
 
 
 def load_mnemonics() -> dict[str, MnemonicInfo]:
@@ -42,21 +47,74 @@ def load_mnemonics() -> dict[str, MnemonicInfo]:
 
 
 ASSEMBLER_DIRECTIVES: set[str] = {
-    "ACONTROL", "ADATA", "AEJECT", "AGO", "AGOB", "AIF", "AIFB",
-    "AINSERT", "ALIAS", "AMODE", "ANOP", "AREAD", "ASPACE",
-    "CATTR", "CCW", "CCW0", "CCW1", "CNOP", "COM", "COPY",
-    "CSECT", "CXD", "DC", "DROP", "DS", "DSECT", "DXD",
-    "EJECT", "END", "ENTRY", "EQU", "EXITCTL", "EXTRN",
-    "GBLA", "GBLB", "GBLC", "ICTL", "ISEQ",
-    "LCLA", "LCLB", "LCLC", "LOCTR", "LTORG",
-    "MACRO", "MEND", "MEXIT", "MHELP", "MNOTE",
-    "OPSYN", "ORG",
-    "POP", "PRINT", "PUNCH", "PUSH",
-    "REPRO", "RMODE", "RSECT",
-    "SETA", "SETAF", "SETB", "SETC", "SETCF",
-    "SPACE", "START",
-    "TITLE", "USING",
-    "WXTRN", "XATTR",
+    "ACONTROL",
+    "ADATA",
+    "AEJECT",
+    "AGO",
+    "AGOB",
+    "AIF",
+    "AIFB",
+    "AINSERT",
+    "ALIAS",
+    "AMODE",
+    "ANOP",
+    "AREAD",
+    "ASPACE",
+    "CATTR",
+    "CCW",
+    "CCW0",
+    "CCW1",
+    "CNOP",
+    "COM",
+    "COPY",
+    "CSECT",
+    "CXD",
+    "DC",
+    "DROP",
+    "DS",
+    "DSECT",
+    "DXD",
+    "EJECT",
+    "END",
+    "ENTRY",
+    "EQU",
+    "EXITCTL",
+    "EXTRN",
+    "GBLA",
+    "GBLB",
+    "GBLC",
+    "ICTL",
+    "ISEQ",
+    "LCLA",
+    "LCLB",
+    "LCLC",
+    "LOCTR",
+    "LTORG",
+    "MACRO",
+    "MEND",
+    "MEXIT",
+    "MHELP",
+    "MNOTE",
+    "OPSYN",
+    "ORG",
+    "POP",
+    "PRINT",
+    "PUNCH",
+    "PUSH",
+    "REPRO",
+    "RMODE",
+    "RSECT",
+    "SETA",
+    "SETAF",
+    "SETB",
+    "SETC",
+    "SETCF",
+    "SPACE",
+    "START",
+    "TITLE",
+    "USING",
+    "WXTRN",
+    "XATTR",
 }
 
 DC_TYPE_DESCRIPTIONS: dict[str, str] = {

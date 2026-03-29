@@ -22,9 +22,7 @@ def test_parse_finds_instruction_statements():
     parser = HlasmParser()
     tree = parser.parse(SAMPLE_SOURCE)
     root = tree.root_node
-    instruction_nodes = [
-        child for child in root.children if child.type == "instruction_statement"
-    ]
+    instruction_nodes = [child for child in root.children if child.type == "instruction_statement"]
     assert len(instruction_nodes) == 5
 
 

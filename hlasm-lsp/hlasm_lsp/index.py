@@ -136,10 +136,19 @@ def _process_instruction(node: Node, index: DocumentIndex) -> None:
         label_sym = _extract_symbol_name(effective_label_node)
         if label_sym:
             index.sections.append(
-                SectionInfo(name=label_sym, kind=effective_op_text, start_line=node.start_point[0], end_line=node.end_point[0])
+                SectionInfo(
+                    name=label_sym,
+                    kind=effective_op_text,
+                    start_line=node.start_point[0],
+                    end_line=node.end_point[0],
+                )
             )
 
-    if effective_op_text == "EQU" and effective_operands_node is not None and effective_label_node is not None:
+    if (
+        effective_op_text == "EQU"
+        and effective_operands_node is not None
+        and effective_label_node is not None
+    ):
         label_sym = _extract_symbol_name(effective_label_node)
         if label_sym:
             index.equ_values[label_sym] = _node_text(effective_operands_node).strip()
@@ -149,7 +158,9 @@ def _process_instruction(node: Node, index: DocumentIndex) -> None:
     if effective_op_text in MACRO_END_OPS and index.macro_blocks:
         last = index.macro_blocks[-1]
         if last.end_line == -1:
-            index.macro_blocks[-1] = MacroBlock(start_line=last.start_line, end_line=node.start_point[0])
+            index.macro_blocks[-1] = MacroBlock(
+                start_line=last.start_line, end_line=node.start_point[0]
+            )
 
     if effective_operands_node is not None:
         _collect_references(effective_operands_node, index)
@@ -185,7 +196,9 @@ def _close_open_sections(root: Node, index: DocumentIndex) -> None:
         end = last_line
         if i + 1 < len(index.sections):
             end = index.sections[i + 1].start_line - 1
-        index.sections[i] = SectionInfo(name=section.name, kind=section.kind, start_line=section.start_line, end_line=end)
+        index.sections[i] = SectionInfo(
+            name=section.name, kind=section.kind, start_line=section.start_line, end_line=end
+        )
 
 
 def _find_named_node_at(node: Node, line: int, character: int) -> Node | None:
