@@ -29,6 +29,8 @@ Tape/Z is an evolving toolkit for analysing mainframe HLASM (High Level Assemble
 
 Tape/Z is designed to parse, analyse, and process HLASM (High Level Assembler) code, which is commonly used in mainframe environments. The project uses ANTLR4 to define the grammar for HLASM instructions and provides tools for working with parsed HLASM code.
 
+The repository is organized into three ecosystems: Java modules (under `java/`), a tree-sitter grammar for HLASM syntax (`tree-sitter-hlasm/`), and a Python-based LSP server for editor integration (`hlasm-lsp/`). A top-level `Makefile` orchestrates builds across all three.
+
 **Philophically, this is more of a set of tools intended for use in your own projects.**
 
 Internally, it uses many of the same components and class infrastructure from [Cobol-REKT](https://github.com/avishek-sen-gupta/cobol-rekt), and is intended to be a sibling project to that one.
@@ -69,7 +71,14 @@ git submodule update --init --recursive
 
 2. Build the project:
    ```bash
-   mvn clean install
+   make all
+   ```
+
+   Or build individual components:
+   ```bash
+   make java        # Java modules only (includes tests)
+   make grammar     # Tree-sitter HLASM grammar (includes tests)
+   make test-lsp    # Python LSP server tests
    ```
 
 3. Set up environment variables for Neo4J (if using):
@@ -127,7 +136,7 @@ This command analyses a HLASM file and exports its control flow graph to JSON fo
 
 **Example:**
 ```bash
-java -jar tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar cfg-to-json /path/to/my/hlasm/file.txt -c /path/to/copybook/directory -o /path/to/output/cfg.json -e /path/to/external/programs
+java -jar java/tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar cfg-to-json /path/to/my/hlasm/file.txt -c /path/to/copybook/directory -o /path/to/output/cfg.json -e /path/to/external/programs
 ```
 
 ### Command: flowchart
@@ -145,7 +154,7 @@ This command builds a flowchart visualization for the entire HLASM program.
 **Example**
 
 ```bash
-OLLAMA_ENDPOINT=http://<ollama.endpoint> java -jar tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar flowchart -s /path/to/source/dir -cp /path/to/copybook/dir -o /path/to/output/dir -e /path/to/external/programs -m OLLAMA program.txt
+OLLAMA_ENDPOINT=http://<ollama.endpoint> java -jar java/tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar flowchart -s /path/to/source/dir -cp /path/to/copybook/dir -o /path/to/output/dir -e /path/to/external/programs -m OLLAMA program.txt
 ```
 
 NOTE: The command above requires an Ollama endpoint to be running to summarise the contents of the flowchart blocks. If you don't wish to do the summarisation, leave out the ```-m``` parameter.
@@ -167,7 +176,7 @@ This command builds flowcharts for all sections of the HLASM program, section by
 **Example:**
 
 ```bash
-OLLAMA_ENDPOINT=http://<ollama.endpoint> java -jar tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar flowchart-sections -s /path/to/source/dir -cp /path/to/copybook/dir -o /path/to/output/dir -e /path/to/external/programs -m OLLAMA program.txt
+OLLAMA_ENDPOINT=http://<ollama.endpoint> java -jar java/tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar flowchart-sections -s /path/to/source/dir -cp /path/to/copybook/dir -o /path/to/output/dir -e /path/to/external/programs -m OLLAMA program.txt
 ```
 
 ### CLI Help
@@ -175,22 +184,23 @@ OLLAMA_ENDPOINT=http://<ollama.endpoint> java -jar tapez-cli/target/tapez-cli-1.
 To see all available commands and general help information:
 
 ```bash
-java -jar tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar --help
+java -jar java/tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar --help
 ```
 
 To see help for a specific command:
 
 ```bash
-java -jar tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar <command> --help
+java -jar java/tapez-cli/target/tapez-cli-1.0-SNAPSHOT.jar <command> --help
 ```
 
 ## Workflow
 
 The typical workflow is:
-1. HLASM code is parsed using the grammar from hlasm-parser and hlasm-format-loader
-2. The parsed code is analysed by hlasm-graph-loader using algorithms from mojo-common to build control flow graphs
-3. The analysis results are stored in Neo4J using the woof module
-4. The hlasm-mcp-server provides API access to the analysis capabilities and results
+1. HLASM code is parsed using the grammar from java/hlasm-parser and java/hlasm-format-loader
+2. The parsed code is analysed by java/hlasm-graph-loader using algorithms from java/mojo-common to build control flow graphs
+3. The analysis results are stored in Neo4J using the java/woof module
+4. The java/tapez-mcp-server provides API access to the analysis capabilities and results
+5. The `hlasm-lsp` server provides real-time editor support (diagnostics, completion, navigation)
 
 ## Analysis Pipeline
 
