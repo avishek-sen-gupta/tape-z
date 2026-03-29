@@ -20,6 +20,7 @@ def _find_csv_path() -> Path:
     package_root = Path(__file__).resolve().parent.parent
     return (
         package_root.parent
+        / "java"
         / "hlasm-parser"
         / "instruction_formats"
         / "HLASM Instruction Format.csv"
