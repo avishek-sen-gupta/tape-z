@@ -181,8 +181,4 @@ public class HLASMParseRuleBuilderVisitor<T> extends AbstractParseTreeVisitor<T>
         return visitChildren(ctx);
     }
 
-    @Override
-    public T visitExpression(HlasmFormatParserParser.ExpressionContext ctx) {
-        return null;
-    }
 }
