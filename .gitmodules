@@ -1,6 +1,6 @@
-[submodule "woof"]
-	path = woof
-	url = https://github.com/asengupta/woof
-[submodule "mojo-common"]
-	path = mojo-common
+[submodule "java/mojo-common"]
+	path = java/mojo-common
 	url = https://github.com/asengupta/mojo-common
+[submodule "java/woof"]
+	path = java/woof
+	url = https://github.com/asengupta/woof
