@@ -15,15 +15,17 @@
 
 ## Repository Structure
 
-- `hlasm-parser/` — ANTLR4-based HLASM parser (Java)
-- `hlasm-format-loader/` — Instruction format loading and processing (Java)
-- `hlasm-graph-loader/` — Control flow graph generation and analysis (Java)
-- `tapez-cli/` — Command-line interface (Java)
-- `tapez-mcp-server/` — Model Context Protocol server (Java)
-- `mojo-common/` — Shared algorithms (git submodule)
-- `woof/` — Neo4j + LLM integration (git submodule)
-- `tree-sitter-hlasm/` — Tree-sitter grammar for HLASM (JavaScript/C)
-- `hlasm-lsp/` — HLASM Language Server Protocol server (Python)
+- `java/` -- All Java/Maven modules:
+  - `java/hlasm-parser/` -- ANTLR4-based HLASM parser
+  - `java/hlasm-format-loader/` -- Instruction format loading and processing
+  - `java/hlasm-graph-loader/` -- Control flow graph generation and analysis
+  - `java/tapez-cli/` -- Command-line interface
+  - `java/tapez-mcp-server/` -- Model Context Protocol server
+  - `java/mojo-common/` -- Shared algorithms (git submodule)
+  - `java/woof/` -- Neo4j + LLM integration (git submodule)
+- `tree-sitter-hlasm/` -- Tree-sitter grammar for HLASM (JavaScript/C)
+- `hlasm-lsp/` -- HLASM Language Server Protocol server (Python)
+- `Makefile` -- Unified build orchestration
 
 ## Task Tracking
 
@@ -65,7 +67,7 @@ Classify before starting. This determines how much ceremony is needed.
 #### Java modules
 
 ```bash
-./mvnw clean test           # compile and run all tests
+cd java && mvn clean test           # compile and run all tests
 ```
 
 #### Python modules (hlasm-lsp)
@@ -81,6 +83,12 @@ poetry run python -m pytest tests/   # all tests
 
 ```bash
 cd tree-sitter-hlasm && npx tree-sitter generate && npx tree-sitter test
+```
+
+#### Unified build (all targets)
+
+```bash
+make all                     # grammar + java + LSP tests
 ```
 
 Do not commit if any check fails. Fix, then re-run. Non-negotiable.
@@ -199,6 +207,6 @@ Report findings only. Do not fix code during review.
 ## External Dependencies
 
 - Java modules require JDK 21+.
-- `mojo-common/` and `woof/` are git submodules — run `git submodule update --init` after clone.
+- `java/mojo-common/` and `java/woof/` are git submodules — run `git submodule update --init` after clone.
 - Neo4j is optional (for graph persistence via `woof/`).
 - Tree-sitter CLI is required for grammar generation (`npx tree-sitter`).
