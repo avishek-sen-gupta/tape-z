@@ -6,6 +6,7 @@ from pygls.lsp.server import LanguageServer
 from hlasm_lsp.parser import HlasmParser
 from hlasm_lsp.index import DocumentIndex
 from hlasm_lsp.diagnostics import extract_diagnostics
+from hlasm_lsp.semantic_tokens import collect_semantic_tokens, TOKEN_TYPES, TOKEN_MODIFIERS
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +49,33 @@ def create_server() -> LanguageServer:
     def did_close(params: types.DidCloseTextDocumentParams) -> None:
         uri = params.text_document.uri
         documents.pop(uri, None)
+
+    legend = types.SemanticTokensLegend(
+        token_types=TOKEN_TYPES,
+        token_modifiers=TOKEN_MODIFIERS,
+    )
+
+    @server.feature(
+        types.TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL,
+        types.SemanticTokensOptions(legend=legend, full=True),
+    )
+    def semantic_tokens_full(params: types.SemanticTokensParams) -> types.SemanticTokens:
+        uri = params.text_document.uri
+        index = documents.get(uri)
+        if index is None:
+            return types.SemanticTokens(data=[])
+        tokens = collect_semantic_tokens(index.tree)
+        data: list[int] = []
+        prev_line = 0
+        prev_char = 0
+        for token in tokens:
+            delta_line = token.line - prev_line
+            delta_char = token.character if delta_line > 0 else token.character - prev_char
+            type_index = TOKEN_TYPES.index(token.token_type)
+            data.extend([delta_line, delta_char, token.length, type_index, 0])
+            prev_line = token.line
+            prev_char = token.character
+        return types.SemanticTokens(data=data)
 
     server._hlasm_parser = parser
     server._hlasm_documents = documents
