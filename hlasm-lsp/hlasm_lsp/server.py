@@ -121,6 +121,24 @@ def create_server() -> LanguageServer:
             for loc in locs
         ]
 
+    from hlasm_lsp.hover import get_hover_info
+
+    @server.feature(types.TEXT_DOCUMENT_HOVER)
+    def hover(params: types.HoverParams) -> types.Hover | None:
+        uri = params.text_document.uri
+        index = documents.get(uri)
+        if index is None:
+            return None
+        info = get_hover_info(index, params.position.line, params.position.character)
+        if info is None:
+            return None
+        return types.Hover(
+            contents=types.MarkupContent(
+                kind=types.MarkupKind.Markdown,
+                value=info,
+            )
+        )
+
     server._hlasm_parser = parser
     server._hlasm_documents = documents
 
