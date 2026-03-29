@@ -139,6 +139,16 @@ def create_server() -> LanguageServer:
             )
         )
 
+    from hlasm_lsp.symbols import get_document_symbols
+
+    @server.feature(types.TEXT_DOCUMENT_DOCUMENT_SYMBOL)
+    def document_symbol(params: types.DocumentSymbolParams) -> list[types.DocumentSymbol]:
+        uri = params.text_document.uri
+        index = documents.get(uri)
+        if index is None:
+            return []
+        return get_document_symbols(index)
+
     server._hlasm_parser = parser
     server._hlasm_documents = documents
 
