@@ -39,4 +39,4 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn clean install -Dmaven.test.skip=true
+        run: cd java && mvn clean install -Dmaven.test.skip=true
