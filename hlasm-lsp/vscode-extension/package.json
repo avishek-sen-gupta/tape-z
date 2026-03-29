@@ -1,0 +1,49 @@
+{
+  "name": "hlasm-lsp",
+  "displayName": "HLASM Language Support",
+  "description": "Language support for IBM HLASM (High Level Assembler)",
+  "version": "0.1.0",
+  "publisher": "tape-z",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:hlasm"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "hlasm",
+        "aliases": [
+          "HLASM",
+          "High Level Assembler"
+        ],
+        "extensions": [
+          ".hlasm",
+          ".asm",
+          ".mac",
+          ".copy",
+          ".s"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "configuration": {
+      "title": "HLASM LSP",
+      "properties": {
+        "hlasmLsp.pythonPath": {
+          "type": "string",
+          "default": "python3",
+          "description": "Path to the Python interpreter used to run the LSP server"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.0"
+  }
+}
